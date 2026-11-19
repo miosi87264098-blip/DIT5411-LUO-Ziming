@@ -71,7 +71,7 @@ The desktop interface reproduces the saved evaluation predictions for 32 out of 
 
 The assignment requires at least 200 training examples for every class.
 
-The training pipeline generates 200 augmented training items per class per full training epoch, producing:
+The full training pipeline uses 200 training items per class per epoch. These include original images and dynamically augmented versions, producing:
 
 13,065 x 200 = 2,613,000 training items per full epoch.
 
@@ -111,6 +111,23 @@ IMPORTANT: These numbers refer to a small three-class development experiment wit
 
 Related comparison artifacts:
 `results/model_comparison_3class_v3.csv`
+
+### Architecture Comparison
+
+The following four models were developed for the three-class pilot task:
+
+| Model | Main architecture | Pilot test accuracy |
+|---|---|---:|
+| MLP V2 | Flatten, Dense(128), Dropout(0.20), Dense(64), 3-class Softmax | 96.97% |
+| CNN V1 | Conv2D(16/32/48), MaxPooling, Flatten, Dense(64), Dropout(0.25), Softmax | 96.97% |
+| Improved CNN V1 | Conv2D(16/32/64/96), Batch Normalization, Global Average Pooling, Dense(64), Dropout(0.30), Softmax | 33.33% |
+| Improved CNN V2 | Conv2D(16/32/64/96), Layer Normalization, MaxPooling, Flatten, Dense(64), Dropout(0.30), Softmax | 100.00% |
+
+These are pilot results on 33 held-out images from three selected classes, not results on the complete 13,065-class task.
+
+The final full-scale CNN V2 uses a separate architecture defined in `src/full_pilot_train.py`: three convolutional layers with 16, 32 and 48 filters, strided downsampling, pooling, a 64-unit dense layer, dropout of 0.20 and a 13,065-unit logits output. It uses Adam with learning rate 0.0003 and sparse categorical cross-entropy from logits.
+
+The final full-scale CNN V2 should not be confused with the three-class Improved CNN V2 pilot model.
 
 ### Full 13,065-Class CNN V2
 
@@ -273,6 +290,25 @@ The repository includes model source code, evaluation summaries, figures and the
 The full source image dataset is not included. Training and evaluation scripts require the original dataset and locally generated split manifests.
 
 When reusing the original data, check its source attribution and license. The trained model and recovered labels should not be interpreted as an authoritative or unrestricted dataset release.
+
+## Dataset Attribution and Licensing
+
+The handwritten character dataset is credited to AI . FREE Team and Po-Chuan Chen (2020), *Traditional Chinese Handwriting Dataset*.
+
+Source repository:
+https://github.com/AI-FREE-Team/Traditional-Chinese-Handwriting-Dataset
+
+Complete dataset repository:
+https://github.com/chenkenanalytic/handwritting_data_all
+
+The dataset authors state that their work was developed from STUST EECS Chinese MNIST, originally provided by Southern Taiwan University of Science and Technology.
+
+The source dataset is published under Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA 4.0):
+https://creativecommons.org/licenses/by-nc-sa/4.0/
+
+The original image collection is not redistributed in this repository. The model checkpoint and reconstructed labels originate from work using this dataset; users should check applicable reuse conditions rather than assuming unrestricted redistribution or commercial use.
+
+A separate open-source license for the author's original project code has not yet been selected. Public repository visibility alone does not grant a general software reuse license.
 
 ## Author
 
