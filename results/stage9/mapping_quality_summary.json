@@ -1,0 +1,23 @@
+{
+  "classes": 13065,
+  "mapped_candidates": 13065,
+  "unique_characters": 13065,
+  "status_counts": {
+    "direct_consistent": 12978,
+    "reconstructed_candidate": 85,
+    "visual_supported_candidate": 2
+  },
+  "visually_supported_special_cases": [
+    {
+      "class_id": 2781,
+      "character": "濈",
+      "source_label_fully_verified": false
+    },
+    {
+      "class_id": 12332,
+      "character": "嶒",
+      "source_label_fully_verified": false
+    }
+  ],
+  "limitation": "This mapping contains inferred candidates. It is not fully validated against an authoritative original label manifest."
+}

@@ -1,0 +1,13 @@
+{
+  "classes": 13065,
+  "original_train_candidates": 522127,
+  "full_train_originals": 417719,
+  "full_validation_images": 104408,
+  "original_test_images": 162550,
+  "classes_without_test_images": 43,
+  "augmentation_required_after_validation": 2195281,
+  "target_training_samples": 2613000,
+  "random_seed": 2026,
+  "validation_policy": "20 percent approximately, maximum 8 images per class",
+  "split_leakage_detected": false
+}

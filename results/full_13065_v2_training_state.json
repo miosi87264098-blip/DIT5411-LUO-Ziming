@@ -1,0 +1,62 @@
+{
+  "config": {
+    "architecture": "pilot_cnn_13065_v2",
+    "classes": 13065,
+    "image_size": 96,
+    "batch_size": 32,
+    "seed": 2026,
+    "training_manifest": "full_train.csv",
+    "validation_manifest": "full_val.csv"
+  },
+  "completed": {
+    "coverage": 1,
+    "full": 3
+  },
+  "checkpoint": "full_13065_v2_full_epoch_003.keras",
+  "history": [
+    {
+      "phase": "coverage",
+      "epoch": 1,
+      "training_samples": 418080,
+      "validation_samples": 13065,
+      "elapsed_seconds": 1451.4655856000027,
+      "loss": 8.728963851928711,
+      "accuracy": 0.0012605242663994431,
+      "val_loss": 7.446286201477051,
+      "val_accuracy": 0.011251434683799744
+    },
+    {
+      "phase": "full",
+      "epoch": 1,
+      "training_samples": 2613000,
+      "validation_samples": 104408,
+      "elapsed_seconds": 5904.0294642,
+      "loss": 5.5884833335876465,
+      "accuracy": 0.0795174166560173,
+      "val_loss": 2.8801698684692383,
+      "val_accuracy": 0.39947131276130676
+    },
+    {
+      "phase": "full",
+      "epoch": 2,
+      "training_samples": 2613000,
+      "validation_samples": 104408,
+      "elapsed_seconds": 10211.638935999996,
+      "loss": 3.4260754585266113,
+      "accuracy": 0.28294986486434937,
+      "val_loss": 1.5664889812469482,
+      "val_accuracy": 0.6452953815460205
+    },
+    {
+      "phase": "full",
+      "epoch": 3,
+      "training_samples": 2613000,
+      "validation_samples": 104408,
+      "elapsed_seconds": 10584.197868500007,
+      "loss": 2.7191247940063477,
+      "accuracy": 0.38980022072792053,
+      "val_loss": 1.2930982112884521,
+      "val_accuracy": 0.7024365663528442
+    }
+  ]
+}

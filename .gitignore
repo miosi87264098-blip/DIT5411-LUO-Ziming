@@ -1,0 +1,30 @@
+# Python virtual environment
+.venv/
+
+# Download and temporary files
+.pip-cache/
+.tmp/
+.wheels/
+
+# Large datasets
+data/
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Local model checkpoints
+*.keras
+*.h5
+
+# DIT5411 SUBMISSION SAFETY RULES
+.venv/
+__pycache__/
+*.pyc
+.tmp/
+.vscode/
+data/
+*.zip
+*.7z
+*.log
+.DS_Store
