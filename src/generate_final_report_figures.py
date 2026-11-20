@@ -32,6 +32,7 @@ def main():
     test = read_json(
         RESULTS / "full_13065_v2_test_metrics.json"
     )
+    split = read_json(RESULTS / "full_split_audit.json")
 
     history = sorted(
         [
@@ -177,11 +178,13 @@ def main():
         "- Output classes: 13,065",
         "- Original training candidates: 522,127",
         "- Final training originals: 417,719",
-        "- Validation images: 104,408",
-        "- Independent test images: 162,550",
+        f"- Original validation images: {split['full_validation_images']:,}",
+        f"- Original assignment test images: {test['test_images']:,}",
         "- Classes with test samples: 13,022",
         "- Classes without test samples: 43",
-        "- Target augmented training samples per epoch: 2,613,000",
+        f"- Training items per full epoch: {split['target_training_samples']:,} "
+        f"({split['full_train_originals']:,} original and "
+        f"{split['augmentation_required_after_validation']:,} transformed)",
         "",
         "## Model",
         "",
@@ -189,7 +192,8 @@ def main():
         "- Parameters: 978,553",
         "- Input shape: 96 x 96 x 1",
         "- Output logits: 13,065",
-        "- Completed Full Epochs: 3",
+        f"- Completed training: {state['completed']['coverage']} coverage epoch(s) "
+        f"and {len(history)} full epochs",
         "- Final checkpoint: full_13065_v2_full_epoch_003.keras",
         "",
         "## Full Training History",
@@ -207,22 +211,50 @@ def main():
             f"{float(x['val_loss']):.4f} |"
         )
 
+    comparison_path = OUTPUT / "full_class_comparison.json"
+    if comparison_path.is_file():
+        v2 = next(
+            model for model in read_json(comparison_path)["models"]
+            if model["model"] == "CNN V2"
+        )
+        validation = v2.get("filtered_validation")
+        if validation:
+            lines.extend([
+                "",
+                "## Filtered Validation Follow-up",
+                "",
+                f"- Images: {validation['images']:,} from {validation['classes']:,} classes, "
+                "after excluding exact matches with development training",
+                f"- Top-1: {validation['top1_accuracy']:.2%} ({validation['top1_correct']:,} correct)",
+                f"- Top-5: {validation['top5_accuracy']:.2%} ({validation['top5_correct']:,} correct)",
+                f"- Macro class accuracy: {validation['macro_class_accuracy']:.2%}",
+            ])
+
     lines.extend([
         "",
-        "## Independent Test Results",
+        "## Original Assignment Test Results",
         "",
         f"- Top-1 Accuracy: {top1:.2f}%",
         f"- Top-5 Accuracy: {top5:.2f}%",
         f"- Macro Class Accuracy: {macro:.2f}%",
-        f"- Best completed validation epoch: {best_val['epoch']}",
+        f"- Highest original validation accuracy: epoch {best_val['epoch']}",
         f"- Test duration: {float(test['evaluation_seconds']) / 60:.2f} minutes",
+    ])
+    if comparison_path.is_file():
+        lines.extend([
+            "",
+            "See the [four-model evaluation](full_class_comparison.json) "
+            "for the common test run and input hashes.",
+        ])
+    lines.extend([
         "",
         "## Limitations",
         "",
         "- The 43 rare categories have no held-out test examples.",
         "- Class-ID to actual Chinese-character mapping still requires verification.",
         "- Three-class MLP/CNN experiments are not equivalent to full-class benchmarking.",
-        "- Dataset path-disjointness was checked, but content-level duplicate detection was not established.",
+        "- The original split check applies to file paths. See the "
+        "[content audit and test protocol](../../README.md#7-original-test-results) for the follow-up audit.",
         "- Test results should not be used repeatedly for hyperparameter selection.",
         "",
         "## Generated Figures",

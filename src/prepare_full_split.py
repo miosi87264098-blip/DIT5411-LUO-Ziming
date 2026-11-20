@@ -221,6 +221,7 @@ def main():
             "20 percent approximately, "
             "maximum 8 images per class"
         ),
+        "leakage_check_scope": "file_paths",
         "split_leakage_detected": False
     }
 
@@ -248,7 +249,7 @@ def main():
         NUM_CLASSES * TARGET_PER_CLASS
     )
 
-    print("Data Leakage Check: PASSED!")
+    print("Split file-path disjointness check: PASSED!")
     print("Output train:", OUTPUT_TRAIN)
     print("Output validation:", OUTPUT_VAL)
     print("Report:", report_path)

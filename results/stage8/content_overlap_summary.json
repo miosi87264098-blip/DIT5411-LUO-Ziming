@@ -1,0 +1,41 @@
+{
+  "image_count": 684677,
+  "archive_sha256": "74607b8d642a4dfd640586efd221cd935bdf16c93c83f2eb9e5092befde60420",
+  "manifest_sha256": {
+    "full_train.csv": "172c1c651407228ee33d8e52ba943d0386f0ce500ab01e33c9aef06e7a662b7e",
+    "full_val.csv": "2d3c750bba68fa7df35e63d504e0004f1bdb8497d9676a4d5ab5cfad246f2a56",
+    "test.csv": "c0e2cbdd54b6976fa8af5b5967e6fe50062cf1b3d586a8f1028728cb9a631e0c"
+  },
+  "methods": [
+    "SHA-256 of original PNG bytes",
+    "SHA-256 of decoded original grayscale shape and pixels"
+  ],
+  "methods_agree_on_cross_split_counts": true,
+  "validation": {
+    "original_rows": 104408,
+    "rows_matching_development_training": 18456,
+    "rows_with_same_label_in_development_training": 18450,
+    "remaining_rows": 85952,
+    "remaining_classes": 13065
+  },
+  "test": {
+    "original_rows": 162550,
+    "rows_matching_development_training_or_validation": 16,
+    "shared_hashes": 1,
+    "matching_image_description": "300 by 300 white image; no same-label matches",
+    "remaining_rows": 162534,
+    "remaining_classes": 13022
+  },
+  "test_sensitivity": {
+    "method": "Subtract the 16 re-inferred test rows from the historical full-test totals",
+    "checkpoint": "full_13065_v2_full_epoch_003.keras",
+    "checkpoint_sha256": "c3ee987e1e66b8074ec61188337295d84aeadf7371126e0682609817678ab256",
+    "top1_correct_in_excluded_rows": 0,
+    "top5_correct_in_excluded_rows": 0,
+    "top1_correct_in_remaining_rows": 108994,
+    "top5_correct_in_remaining_rows": 144406,
+    "top1_accuracy": 0.6705919992124725,
+    "top5_accuracy": 0.8884664131812421,
+    "macro_class_accuracy": 0.6718990354227198
+  }
+}

@@ -66,10 +66,9 @@
 
 ## Error Examples
 
-![Misclassified images](error_analysis_montage.png)
+![Misclassified images with recovered character labels](error_analysis_chinese_labels.png)
 
-Displayed examples: 24
-Missing image files: 0
+Image source: [Traditional Chinese Handwriting Dataset](../../README.md#dataset-attribution-and-licensing). Selected original test samples are resized for the figure and annotated with their labels and predictions.
 
 The saved error-example CSV contains only
 up to the first 200 errors encountered.
@@ -95,5 +94,4 @@ verification before they can be confirmed.
 - Path-level splitting does not prove the absence
   of image-content duplicates.
 
-See character_mapping_audit.txt for
-the original metadata inspection.
+See the [mapping quality report](../stage9/mapping_quality_report.md) for the label audit.

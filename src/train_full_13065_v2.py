@@ -113,6 +113,11 @@ def load_image(path, label, augment_flag, seed):
     if augment_flag:
         image = augment_image(image, seed=seed)
 
+    return preprocess_image(image), np.int32(label)
+
+
+def preprocess_image(image):
+    """Resize an original or augmented grayscale glyph to the model input."""
     image = cv2.resize(
         image,
         (IMAGE_SIZE, IMAGE_SIZE),
@@ -123,7 +128,7 @@ def load_image(path, label, augment_flag, seed):
         image.astype(np.float32) / 255.0
     )
 
-    return image[..., np.newaxis], np.int32(label)
+    return image[..., np.newaxis]
 
 
 def tensorflow_process(path, label, flag, seed):

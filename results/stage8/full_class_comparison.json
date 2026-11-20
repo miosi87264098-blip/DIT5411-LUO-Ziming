@@ -1,0 +1,238 @@
+{
+  "test": {
+    "manifest": "data/splits/test.csv",
+    "manifest_sha256": "c0e2cbdd54b6976fa8af5b5967e6fe50062cf1b3d586a8f1028728cb9a631e0c",
+    "images": 162550,
+    "represented_classes": 13022,
+    "known_exact_cross_split_white_images": 16,
+    "archive_sha256": "74607b8d642a4dfd640586efd221cd935bdf16c93c83f2eb9e5092befde60420",
+    "top_k_tie_break": "ascending_class_id"
+  },
+  "comparison_scope": "Same original test split and input normalization. Training recipes and budgets differ.",
+  "models": [
+    {
+      "model": "CNN V2",
+      "checkpoint": "full_13065_v2_full_epoch_003.keras",
+      "checkpoint_sha256": "c3ee987e1e66b8074ec61188337295d84aeadf7371126e0682609817678ab256",
+      "training": {
+        "coverage_epochs": 1,
+        "full_epochs": 3,
+        "items_per_class_per_full_epoch": 200
+      },
+      "test": {
+        "top1_correct": 108994,
+        "top5_correct": 144406,
+        "top1_accuracy": 0.6705259920024608,
+        "top5_accuracy": 0.8883789603199016,
+        "macro_class_accuracy": 0.6718486822197594,
+        "evaluation_seconds": 162.5199117000011,
+        "batch_size": 128
+      },
+      "historical_test": {
+        "top1_correct": 108994,
+        "top5_correct": 144406,
+        "top1_accuracy": 0.6705259920024608,
+        "top5_accuracy": 0.8883789603199016,
+        "macro_class_accuracy": 0.6718486822197594,
+        "evaluation_seconds": 1598.5436130000016
+      },
+      "filtered_validation": {
+        "manifest": "archive_png_bytes_nonoverlap_validation.csv",
+        "manifest_sha256": "1659a678431c1ca8e836650153f41dae5ecef615618bf4f64959f2171dc849c3",
+        "images": 85952,
+        "classes": 13065,
+        "top1_correct": 58496,
+        "top5_correct": 77080,
+        "top1_accuracy": 0.680565897244974,
+        "top5_accuracy": 0.8967795979151154,
+        "macro_class_accuracy": 0.6812020483662274,
+        "evaluation_seconds": 711.9587401999997
+      }
+    },
+    {
+      "model": "Pooled nearest centroid",
+      "checkpoint": "full_pooled_nearest_centroid.keras",
+      "checkpoint_sha256": "496da67f0265b87027fbc63614eb7d3d0dbb10e2344a88cb1a7ab2416f2f2747",
+      "training": {
+        "model": "full_pooled_nearest_centroid.keras",
+        "model_sha256": "496da67f0265b87027fbc63614eb7d3d0dbb10e2344a88cb1a7ab2416f2f2747",
+        "estimator": "Analytic nearest centroid with squared Euclidean distance",
+        "parameters": 1894425,
+        "training_manifest": "data/splits/full_train.csv",
+        "training_manifest_sha256": "172c1c651407228ee33d8e52ba943d0386f0ce500ab01e33c9aef06e7a662b7e",
+        "output_classes": 13065,
+        "input_shape": [
+          96,
+          96,
+          1
+        ],
+        "feature_shape": [
+          12,
+          12
+        ],
+        "training_items_per_class": 200,
+        "fitting_items_total": 2613000,
+        "original_training_items": 417719,
+        "augmented_training_items": 2195281,
+        "augmentation": {
+          "order": "96x96 canonical preprocessing, average pooling, then augmentation",
+          "rotation_degrees": [
+            -8,
+            8
+          ],
+          "scale": [
+            0.9,
+            1.08
+          ],
+          "horizontal_shear": [
+            -0.12,
+            0.12
+          ],
+          "seed": 2026
+        },
+        "fit_seconds": 774.1475019999998
+      },
+      "test": {
+        "top1_correct": 9568,
+        "top5_correct": 22138,
+        "top1_accuracy": 0.05886188864964626,
+        "top5_accuracy": 0.13619194094124884,
+        "macro_class_accuracy": 0.06047122815127473,
+        "evaluation_seconds": 83.61133819999668,
+        "batch_size": 256
+      }
+    },
+    {
+      "model": "Pooled MLP",
+      "checkpoint": "best.keras",
+      "checkpoint_sha256": "27756f32e03dcc207b138e41c977ac55c44e7e51b13e482ab9e0118c36663cf6",
+      "training": {
+        "architecture": "mlp",
+        "parameters": 914825,
+        "input_shape": [
+          null,
+          96,
+          96,
+          1
+        ],
+        "training_input_shape": [
+          null,
+          32,
+          32,
+          1
+        ],
+        "output_classes": 13065,
+        "seed": 2026,
+        "tensorflow": "2.20.0",
+        "numpy": "2.1.3",
+        "opencv": "4.12.0",
+        "batch_size": 512,
+        "workers": 4,
+        "threads": 8,
+        "planned_full_epochs": 1,
+        "augmentation_pipeline": "96-to-32 pooled grayscale then batched seeded TensorFlow bilinear affine",
+        "training_manifest": "full_train.csv",
+        "training_manifest_sha256": "172c1c651407228ee33d8e52ba943d0386f0ce500ab01e33c9aef06e7a662b7e",
+        "validation_manifest": "archive_png_bytes_nonoverlap_validation.csv",
+        "validation_manifest_sha256": "1659a678431c1ca8e836650153f41dae5ecef615618bf4f64959f2171dc849c3",
+        "original_training_images": 417719,
+        "dynamic_augmented_items_per_full_epoch": 2195281,
+        "training_items_per_class_per_full_epoch": 200,
+        "training_items_per_full_epoch": 2613000,
+        "validation_images": 85952,
+        "validation_classes": 13065,
+        "best_checkpoint": "best.keras",
+        "history": [
+          {
+            "epoch": 1,
+            "epoch_seconds_including_validation": 175.76040439999997,
+            "loss": 7.599732875823975,
+            "top1_accuracy": 0.023057404905557632,
+            "val_loss": 6.6523613929748535,
+            "val_top1_accuracy": 0.04706114903092384
+          }
+        ],
+        "archive_sha256": "74607b8d642a4dfd640586efd221cd935bdf16c93c83f2eb9e5092befde60420",
+        "archive_cache_reused": true,
+        "archive_cache_seconds": 0.897062799998821,
+        "best_epoch": 1,
+        "best_checkpoint_sha256": "27756f32e03dcc207b138e41c977ac55c44e7e51b13e482ab9e0118c36663cf6"
+      },
+      "test": {
+        "top1_correct": 7105,
+        "top5_correct": 19503,
+        "top1_accuracy": 0.04370962780682867,
+        "top5_accuracy": 0.11998154414026453,
+        "macro_class_accuracy": 0.0451323268948229,
+        "evaluation_seconds": 79.75968300000022,
+        "batch_size": 256
+      }
+    },
+    {
+      "model": "Small CNN",
+      "checkpoint": "best.keras",
+      "checkpoint_sha256": "094c7591194bf4e5809e59c93325b2e53c3f1e1ba92814befc7dd23e3b9f7fe2",
+      "training": {
+        "architecture": "cnn",
+        "parameters": 877505,
+        "input_shape": [
+          null,
+          96,
+          96,
+          1
+        ],
+        "training_input_shape": [
+          null,
+          32,
+          32,
+          1
+        ],
+        "output_classes": 13065,
+        "seed": 2026,
+        "tensorflow": "2.20.0",
+        "numpy": "2.1.3",
+        "opencv": "4.12.0",
+        "batch_size": 512,
+        "workers": 4,
+        "threads": 8,
+        "planned_full_epochs": 1,
+        "augmentation_pipeline": "96-to-32 pooled grayscale then batched seeded TensorFlow bilinear affine",
+        "training_manifest": "full_train.csv",
+        "training_manifest_sha256": "172c1c651407228ee33d8e52ba943d0386f0ce500ab01e33c9aef06e7a662b7e",
+        "validation_manifest": "archive_png_bytes_nonoverlap_validation.csv",
+        "validation_manifest_sha256": "1659a678431c1ca8e836650153f41dae5ecef615618bf4f64959f2171dc849c3",
+        "original_training_images": 417719,
+        "dynamic_augmented_items_per_full_epoch": 2195281,
+        "training_items_per_class_per_full_epoch": 200,
+        "training_items_per_full_epoch": 2613000,
+        "validation_images": 85952,
+        "validation_classes": 13065,
+        "best_checkpoint": "best.keras",
+        "history": [
+          {
+            "epoch": 1,
+            "epoch_seconds_including_validation": 212.45916320000106,
+            "loss": 6.7947564125061035,
+            "top1_accuracy": 0.04347263649106026,
+            "val_loss": 6.145666122436523,
+            "val_top1_accuracy": 0.06455928832292557
+          }
+        ],
+        "archive_sha256": "74607b8d642a4dfd640586efd221cd935bdf16c93c83f2eb9e5092befde60420",
+        "archive_cache_reused": true,
+        "archive_cache_seconds": 0.9836670000004233,
+        "best_epoch": 1,
+        "best_checkpoint_sha256": "094c7591194bf4e5809e59c93325b2e53c3f1e1ba92814befc7dd23e3b9f7fe2"
+      },
+      "test": {
+        "top1_correct": 9649,
+        "top5_correct": 25886,
+        "top1_accuracy": 0.05936019686250384,
+        "top5_accuracy": 0.15924946170409104,
+        "macro_class_accuracy": 0.06190336246905197,
+        "evaluation_seconds": 46.293027800002164,
+        "batch_size": 256
+      }
+    }
+  ]
+}

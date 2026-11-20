@@ -26,6 +26,7 @@ OUT.mkdir(parents=True, exist_ok=True)
 
 N_CLASSES = 13065
 IMAGE_SIZE = 96
+MIN_REFERENCE_EXAMPLES = 12
 
 MODES = [
     "area_inverted",
@@ -37,11 +38,18 @@ MODES = [
 ]
 
 
-def read_csv(path):
+class ImageDecodeError(ValueError):
+    pass
+
+
+def read_csv(path, required_fields=()):
     with path.open(
         "r", encoding="utf-8-sig", newline=""
     ) as file:
-        return list(csv.DictReader(file))
+        reader = csv.DictReader(file, strict=True)
+        if not set(required_fields).issubset(reader.fieldnames or []):
+            raise ValueError(f"Missing required CSV columns: {path}")
+        return list(reader)
 
 
 def resolve_path(value):
@@ -57,12 +65,10 @@ def read_image(path):
 
     data = np.fromfile(str(path), dtype=np.uint8)
 
-    image = cv2.imdecode(
-        data, cv2.IMREAD_GRAYSCALE
-    )
+    image = cv2.imdecode(data, cv2.IMREAD_GRAYSCALE) if data.size else None
 
     if image is None:
-        raise ValueError(
+        raise ImageDecodeError(
             "Cannot decode image: " + str(path)
         )
 
@@ -123,47 +129,51 @@ def load_mapping():
 
 
 def load_reference_examples():
+    try:
+        rows = read_csv(ERROR_PATH, ("image_path", "predicted_class_id"))
+    except FileNotFoundError:
+        return []
+
     examples = []
     used_paths = set()
 
-    for row in read_csv(ERROR_PATH):
-        if len(examples) >= 32:
-            break
+    for row_number, row in enumerate(rows, 2):
+        image_path = row["image_path"]
+        if None in row or not image_path or not image_path.strip():
+            raise ValueError(
+                f"Malformed reference CSV row {row_number}: {ERROR_PATH}"
+            )
 
-        path = resolve_path(row["image_path"])
+        try:
+            expected = int(row["predicted_class_id"])
+        except (TypeError, ValueError) as exc:
+            raise ValueError(
+                f"Invalid predicted class ID on CSV row {row_number}: {ERROR_PATH}"
+            ) from exc
+        if not 1 <= expected <= N_CLASSES:
+            raise ValueError(
+                f"Predicted class ID out of range on CSV row {row_number}: {ERROR_PATH}"
+            )
 
-        if str(path) in used_paths:
+        path = resolve_path(image_path)
+        if len(examples) >= 32 or path in used_paths:
             continue
 
         try:
             image = read_image(path)
-            expected = int(
-                row["predicted_class_id"]
-            )
-        except (OSError, ValueError, KeyError):
-            continue
-
-        if not 1 <= expected <= N_CLASSES:
+        except (FileNotFoundError, ImageDecodeError):
             continue
 
         examples.append((image, expected))
-        used_paths.add(str(path))
-
-    if len(examples) < 12:
-        raise RuntimeError(
-            "Too few reference images for "
-            "preprocessing compatibility check."
-        )
+        used_paths.add(path)
 
     return examples
 
 
-def calibrate_preprocessing(model):
+def calibrate_preprocessing(model, references):
     print("")
     print("Checking inference compatibility...")
     print("Using saved test predictions as references.")
-
-    references = load_reference_examples()
 
     expected = np.array(
         [item[1] for item in references],
@@ -634,13 +644,15 @@ def main():
     # compatibility check. For a fresh GitHub
     # checkout, use the previously validated
     # preprocessing configuration.
-    if ERROR_PATH.is_file():
-        mode = calibrate_preprocessing(model)
+    references = load_reference_examples()
+    if len(references) >= MIN_REFERENCE_EXAMPLES:
+        mode = calibrate_preprocessing(model, references)
     else:
         mode = "area_inverted"
         print("")
         print(
-            "Original test references are unavailable."
+            f"Readable cached test references: {len(references)} "
+            f"(minimum for compatibility check: {MIN_REFERENCE_EXAMPLES})."
         )
         print(
             "Using validated preprocessing: "
