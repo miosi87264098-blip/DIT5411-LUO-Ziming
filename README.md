@@ -327,7 +327,9 @@ The complete dataset distribution README specifies [CC BY-NC-SA 4.0](https://cre
 
 The full collection is omitted. The annotated error analysis figure contains selected test images from the attributed dataset. The model checkpoint and recovered labels were produced using this dataset. Check the applicable terms before redistributing these materials or using them commercially.
 
-A separate open-source license for the author's original project code has not yet been selected. Public repository visibility alone does not grant a general software reuse license.
+## Source Code License
+
+The [MIT License](src/LICENSE) applies only to original Python source in `src/` that LUO Ziming has the right to license. Third-party materials follow their applicable terms. See [Dataset Attribution and Licensing](#dataset-attribution-and-licensing) for the dataset, trained model checkpoint, recovered character mappings, and figures.
 
 ## Author
 
